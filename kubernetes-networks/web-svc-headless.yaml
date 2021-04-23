@@ -6,7 +6,7 @@ spec:
   selector:
     app: web
   type: ClusterIP
-  clusterIP: none
+  clusterIP: None
   ports:
     - protocol: TCP
       port: 80

@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web
+  labels:
+    app: web
 spec:
   replicas: 3
   selector:
@@ -14,13 +16,12 @@ spec:
       maxSurge: 100%
   template:
     metadata:
-      name: web
       labels:
         app: web
     spec:
       containers:
-        - name: web
-          image: registry.hub.docker.com/870414/intro:latest
+        - name: otus-k8s-web
+          image: avtandilko/web:1.0
           readinessProbe:
             httpGet:
               path: /index.html
@@ -28,16 +29,22 @@ spec:
           livenessProbe:
             tcpSocket:
               port: 8000
+          ports:
+            - containerPort: 8000
           volumeMounts:
-            - name: app
+            - name: otus-k8s-web-volume
               mountPath: /app
+          resources:
+            limits:
+              cpu: "0.1"
+              memory: "100Mi"
       initContainers:
-        - name: busybox
-          image: busybox:1.31.0
-          command: ["sh", "-c", "wget -O- https://tinyurl.com/otus-k8s-intro | sh"]
+        - name: init
+          image: busybox:1.32.0
+          command: ['sh', '-c', 'wget -O- https://tinyurl.com/otus-k8s-intro | sh']
           volumeMounts:
-            - name: app
+            - name: otus-k8s-web-volume
               mountPath: /app
       volumes:
-        - name: app
+        - name: otus-k8s-web-volume
           emptyDir: {}
