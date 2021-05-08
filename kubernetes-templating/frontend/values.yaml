@@ -1,0 +1,10 @@
+image:
+  tag: v0.1.3
+replicas: 1
+service:
+  type: NodePort
+  port: 80
+  targetPort: 8079
+  NodePort: 30001
+ingress:
+  host: a3e9fb0bf36f94df2aafdbb19a8f91ae-1274941855.eu-central-1.elb.amazonaws.com
